@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="navbar">
+    <h2>🏙️ Smart City</h2>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/complaint">Raise Complaint</a>
+        <a href="/view_complaints">View Complaints</a>
+    </div>
+</div>
+
+<h2>Welcome to Dashboard 🎉</h2>
+<p style="color:white; font-size:18px;">Manage city issues efficiently 🚀</p>
+<p>You are logged in!</p>
+
+<!-- Cards -->
+<div class="cards">
+    <div class="card">
+        <h3>📢 Raise Complaint</h3>
+        <a href="/complaint">Go</a>
+    </div>
+
+    <div class="card">
+        <h3>📋 View Complaints</h3>
+        <a href="/view_complaints">Go</a>
+    </div>
+</div>
+
+<br><br>
+
+<!-- Chart -->
+<h2>📊 Complaint Statistics</h2>
+
+<div class="chart-container">
+    <canvas id="myChart"></canvas>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+window.onload = function() {
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Total', 'Pending', 'In Progress', 'Resolved'],
+            datasets: [{
+                label: 'Complaints',
+                data: [{{ total }}, {{ pending }}, {{ in_progress }}, {{ resolved }}],
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+};
+</script>
+
+<!-- Chatbot -->
+<div class="chatbot">
+    <h4>🤖 Help Assistant</h4>
+    <div id="chatbox"></div>
+    <input type="text" id="userInput" placeholder="Ask something...">
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+function sendMessage() {
+    var input = document.getElementById("userInput").value.toLowerCase();
+    var chatbox = document.getElementById("chatbox");
+
+    var response = "";
+
+    if (input.includes("complaint")) {
+        response = "Go to 'Raise Complaint' page to submit your issue.";
+    } 
+    else if (input.includes("status")) {
+        response = "Check 'View Complaints' to see status.";
+    } 
+    else if (input.includes("hello") || input.includes("hi")) {
+        response = "Hello! How can I help you?";
+    } 
+    else {
+        response = "Sorry, I didn't understand. Try asking about complaints.";
+    }
+
+    chatbox.innerHTML += "<p><b>You:</b> " + input + "</p>";
+    chatbox.innerHTML += "<p><b>Bot:</b> " + response + "</p>";
+
+    chatbox.scrollTop = chatbox.scrollHeight;
+    document.getElementById("userInput").value = "";
+}
+
+// Enter key support
+document.getElementById("userInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
+});
+</script>
+
+</body>
+</html>

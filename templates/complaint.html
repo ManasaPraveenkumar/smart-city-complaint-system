@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Raise Complaint</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="navbar">
+    <h2>🏙️ Smart City</h2>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/complaint">Raise Complaint</a>
+        <a href="/view_complaints">View Complaints</a>
+    </div>
+</div>
+    <h2>Raise Complaint</h2>
+    <form method="POST"  enctype="multipart/form-data">
+        Title: <input type="text" name="title" required ><br><br>
+        Description: <input type="text" name="description" required ><br><br>
+        Category:
+        <select name="category" required >
+            <option>Garbage</option>
+            <option>Pothole</option>
+            <option>Water Issue</option>
+            <option>Street Light</option>
+        </select><br><br>
+        Location: <input type="text" id="location" name="location" required ><br><br>
+        <div id="map" style="height:300px; width:100%;"></div>
+        Image: <input type="file" name="image"><br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 13,
+        center: {lat: 12.9716, lng: 77.5946} // Bangalore default
+    });
+
+    var marker;
+
+    map.addListener('click', function(e) {
+        var lat = e.latLng.lat();
+        var lng = e.latLng.lng();
+
+        document.getElementById("location").value = lat + "," + lng;
+
+        if (marker) marker.setMap(null);
+
+        marker = new google.maps.Marker({
+            position: e.latLng,
+            map: map
+        });
+    });
+}
+    </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHBuEBLCQy7tnF6bb0Bt165BfKnpJUHjo&callback=initMap" async defer></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Complaints</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="navbar">
+    <h2>🏙️ Smart City</h2>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/complaint">Raise Complaint</a>
+        <a href="/view_complaints">View Complaints</a>
+    </div>
+</div>
+    <h2>All Complaints</h2>
+
+    <table border="1">
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Action</th>
+            <th> Image </th>
+            <th>Date</th>
+        </tr>
+
+        {% for complaint in complaints %}
+        <tr>
+            <td>{{ complaint[2] }}</td>
+            <td>{{ complaint[3] }}</td>
+            <td>{{ complaint[4] }}</td>
+            <td>
+    <a href="https://www.google.com/maps?q={{ complaint[5] }}" target="_blank">
+        View Location 📍
+    </a>
+            </td>
+            <td>
+    {% if complaint[6] == 'Pending' %}
+        <span style="color: orange; font-weight: bold;">Pending</span>
+    {% elif complaint[6] == 'In Progress' %}
+        <span style="color: blue; font-weight: bold;">In Progress</span>
+    {% else %}
+        <span style="color: green; font-weight: bold;">Resolved</span>
+    {% endif %}
+          </td>
+            <td>
+              <a href="/update_status/{{ complaint[0] }}/In Progress">In Progress</a> |
+              <a href="/update_status/{{ complaint[0] }}/Resolved">Resolved</a>
+            </td>
+            <td>
+              {% if complaint[7] %}
+                 <img src="{{ url_for('static', filename='uploads/' + complaint[7]) }}" width="100" style="border-radius:8px;">
+              {% else %}
+                 <span style="color:gray;">No Image</span>
+              {% endif %}
+           </td>
+           <td>{{ complaint[8] }}</td>
+        </tr>
+        {% endfor %}
+            
+    </table>
+</body>
+</html>
